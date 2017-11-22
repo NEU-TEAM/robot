@@ -1,0 +1,6 @@
+is_ready_to_capture: true
+is_ready_to_interrupt: false
+is_ready_to_play: false
+is_ready_to_remind: false
+is_ready_to_serve: false
+is_ready_to_translate: false
