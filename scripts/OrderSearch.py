@@ -12,14 +12,14 @@ class OrderSearch:
         self.location = ""
         self.left_arm = ""
         rospy.init_node('OrderSearch', anonymous=True)
-        rospy.Subscriber('order_search', String, self.orderSearchCallBack)
+        rospy.Subscriber('/ctrl/voice/order_search', String, self.order_search_callback)
         self.pub_android_remote_control = rospy.Publisher("android_remote_control", String, queue_size=1)
-        self.pub_text_to_voice = rospy.Publisher('text_to_voice', String, queue_size=1)
-        self.pub_text_to_text = rospy.Publisher('text_to_text', String, queue_size=1)
+        self.pub_text_to_voice = rospy.Publisher('/ctrl/voice/text_to_voice', String, queue_size=1)
+        self.pub_text_to_text = rospy.Publisher('/ctrl/voice/text_to_text', String, queue_size=1)
 
         self.pub_leftarm = rospy.Publisher('/call/leftarm', Int32, queue_size=2)
         # self.pub_navigation = rospy.Publisher('simple_navigation', Int32, queue_size=1)
-        self.pub_location = rospy.Publisher('nav_location_goal', PoseStamped, queue_size=1)
+        self.pub_location = rospy.Publisher('/ctrl/voice/nav_location_goal', PoseStamped, queue_size=1)
 
         self.location_list = ['厨房','卧室','客厅']
 
@@ -29,7 +29,7 @@ class OrderSearch:
         					'leftarm':	["递我", "放手",'给我','递我吧','放手吧','给我吧']
         				  }
 
-    def orderSearch(self, data, dictionary):
+    def order_search(self, data, dictionary):
         for (key, sentences) in dictionary.iteritems():
             for sentence in sentences:
                 if data == sentence:
@@ -46,10 +46,9 @@ class OrderSearch:
 
                 	return key
 
-    def orderSearchCallBack(self, msg):
+    def order_search_callback(self, msg):
     	text_to_voice = ''
-    	print(len(msg.data))
-        order = self.orderSearch(msg.data[:-3], self.order_dict)
+        order = self.order_search(msg.data[:-3], self.order_dict)
 
         if order == 'bottle':
             text_to_voice = "好的，我这就去拿！"

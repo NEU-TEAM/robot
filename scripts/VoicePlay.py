@@ -10,7 +10,7 @@ is_ready_to_interrupt = False
 is_ready_to_remind = False
 
 
-def voiceRemind():
+def voice_remind():
     wave_file = wave.open('/robot/wav/remindVoice.wav', 'rb')
     dev_to_play = pyaudio.PyAudio()
     stream = dev_to_play.open(format=dev_to_play.get_format_from_width(wave_file.getsampwidth()), channels=wave_file.getnchannels(), rate=wave_file.getframerate(), output=True)
@@ -28,7 +28,7 @@ def voiceRemind():
     dev_to_play.terminate()
 
 
-def voicePlay():
+def voice_play():
     wave_file = wave.open('/robot/wav/synthesizedVoice.wav', 'rb')
     dev_to_play = pyaudio.PyAudio()
     stream = dev_to_play.open(format=dev_to_play.get_format_from_width(wave_file.getsampwidth()), channels=wave_file.getnchannels(), rate=wave_file.getframerate(), output=True)
@@ -56,8 +56,8 @@ if __name__ == '__main__':
         is_ready_to_remind = rospy.get_param('is_ready_to_remind')
         is_ready_to_play = rospy.get_param('is_ready_to_play')
         if is_ready_to_remind:
-            voiceRemind()
+            voice_remind()
         if is_ready_to_play:
-            voicePlay()
+            voice_play()
             
     print("VoicePlay is over!")

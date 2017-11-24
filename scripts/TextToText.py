@@ -15,11 +15,11 @@ class TextToText:
         self.user_id = '102043'
         self.loc = '辽宁省沈阳市'
         self.request = 'http://www.tuling123.com/openapi/api?key=' + self.key + '&loc=' + self.loc + '&userid=' + self.user_id + '&info='
-        self.pub_text_to_voice = rospy.Publisher("text_to_voice", String, queue_size=1)
-        self.pub_android_remote_control = rospy.Publisher("android_remote_control", String, queue_size=1)
-        rospy.Subscriber("text_to_text", String, self.turingCallBack)
+        self.pub_text_to_voice = rospy.Publisher("/ctrl/voice/text_to_voice", String, queue_size=1)
+        self.pub_android_remote_control = rospy.Publisher("/ctrl/voice/android_remote_control", String, queue_size=1)
+        rospy.Subscriber("/ctrl/voice/text_to_text", String, self.turing_callback)
 
-    def turingCallBack(self, msg):
+    def turing_callback(self, msg):
         url = self.request + msg.data
         response = urllib.urlopen(url)
         text_str = response.read()

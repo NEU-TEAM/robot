@@ -132,7 +132,7 @@ int text_to_voice(const char* src_text, const char* des_path, const char* params
 	return ret;
 }
 
-void xf_tts_callBack(const std_msgs::String::ConstPtr& msg)
+void xf_tts_callback(const std_msgs::String::ConstPtr& msg)
 {
 	int         ret                  = MSP_SUCCESS;
     const char* login_params         = "appid =57331875, work_dir = .";//登录参数,appid与msc库绑定,请勿随意改动
@@ -159,7 +159,7 @@ int main(int argc,char **argv)
 {
     ros::init(argc,argv,"text_to_voice");
     ros::NodeHandle n;
-    ros::Subscriber pub = n.subscribe("text_to_voice", 10, xf_tts_callBack); 
+    ros::Subscriber pub = n.subscribe("/ctrl/voice/text_to_voice", 10, xf_tts_callback); 
     ros::spin();
     return 0;
 }

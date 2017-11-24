@@ -8,10 +8,10 @@ from std_msgs.msg import String
 class RemoteControl:
     def __init__(self):
         rospy.init_node('RemoteControl', anonymous=True)
-        rospy.Subscriber('pc_remote_control', String, self.remoteControlCallBack)
-        self.pub_order_search = rospy.Publisher("order_search", String, queue_size=1)
+        rospy.Subscriber('pc_remote_control', String, self.remote_control_callback)
+        self.pub_order_search = rospy.Publisher("/ctrl/voice/order_search", String, queue_size=1)
 
-    def remoteControlCallBack(self, msg):
+    def remote_control_callback(self, msg):
         if rospy.get_param("is_ready_to_play"):
             rospy.set_param("is_ready_to_interrupt", True)
         rospy.set_param("is_remote_control", True)

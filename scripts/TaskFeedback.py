@@ -8,10 +8,10 @@ from std_msgs.msg import String
 class TaskFeedback:
     def __init__(self):
         rospy.init_node('TaskFeedback', anonymous=True)
-        rospy.Subscriber('/task_status', String, self.taskFeedBackCallBack)
+        rospy.Subscriber('/ctrl/voice//task_status', String, self.task_feedback_callback)
 
     @staticmethod
-    def taskFeedBackCallBack(msg):
+    def task_feedback_callback(msg):
     	task = rospy.get_param('/task')
         if msg.data == "Goal_succeeded" and task == 'bottle':
             rospy.set_param("/comm/param/control/target/is_set", True)

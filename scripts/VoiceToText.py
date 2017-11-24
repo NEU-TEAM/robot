@@ -24,7 +24,7 @@ class VoiceToText:
         self.auth_url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=" + self.apiKey + "&client_secret=" + self.secretKey;
         self.access_token = self.get_token()
         self.cuid = uuid.UUID(int=uuid.getnode()).hex[-12:]
-        self.pub_order_search = rospy.Publisher('order_search', String, queue_size=1)
+        self.pub_order_search = rospy.Publisher('/ctrl/voice/order_search', String, queue_size=1)
 
         while not rospy.is_shutdown():
             is_ready_to_translate = False
