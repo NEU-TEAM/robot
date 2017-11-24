@@ -14,7 +14,7 @@ is_ready_to_capture = True
 capturedVoice = '/robot/wav/capturedVoice.wav'
 
 
-def voiceCapure():
+def voice_capture():
     num_samples = 2000  # pyaudio内置缓冲大小
     sampling_rate = 16000  # 取样频率
     level = 2000  # 声音保存的阈值
@@ -66,7 +66,7 @@ def voiceCapure():
 
 
 if __name__ == '__main__':
-    rospy.init_node('VoiceCapure', anonymous=True)
+    rospy.init_node('voice_capture', anonymous=True)
     rate = rospy.Rate(10)  # 10hz
 
     while not rospy.is_shutdown():
@@ -74,7 +74,7 @@ if __name__ == '__main__':
         is_ready_to_capture = rospy.get_param('is_ready_to_capture')
         if is_ready_to_serve and is_ready_to_capture:
             print("Recording a piece of voice!")
-            voiceCapure()
+            voice_capture()
         rate.sleep()
         
-    print("VoiceCapure is over!")
+    print("Voice capture is over!")
