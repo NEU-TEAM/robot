@@ -5,10 +5,6 @@ import rospy
 import pyaudio
 import wave
 
-is_ready_to_play = False
-is_ready_to_interrupt = False
-is_ready_to_remind = False
-
 
 def voice_remind():
     wave_file = wave.open('/robot/wav/remindVoice.wav', 'rb')
@@ -33,7 +29,6 @@ def voice_play():
     dev_to_play = pyaudio.PyAudio()
     stream = dev_to_play.open(format=dev_to_play.get_format_from_width(wave_file.getsampwidth()), channels=wave_file.getnchannels(), rate=wave_file.getframerate(), output=True)
     while True:
-        global is_ready_to_interrupt
         is_ready_to_interrupt = rospy.get_param("is_ready_to_interrupt")
         if is_ready_to_interrupt:
             break

@@ -6,10 +6,6 @@ from pyaudio import PyAudio, paInt16
 import numpy as np
 import wave
 
-is_ready_to_serve = False
-is_ready_to_recognize = False
-is_ready_to_capture = True
-
 captured_voice = '/robot/wav/capturedVoice.wav'
 
 
