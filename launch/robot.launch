@@ -1,16 +1,13 @@
 <?xml version="1.0"?>
 
 <launch>
-  <!--node name="wakeup_to_serve" pkg="robot" type="wakeup_to_serve" output="screen"/-->
   <rosparam file="$(find robot)/param/param.yaml" command="load"/>
-  <node name="voice_to_capture" pkg="robot" type="voice_to_capture.py" output="screen"/>
-  <node name="voice_to_play" pkg="robot" type="voice_to_play.py" output="screen"/>
-  <node name="text_to_voice" pkg="robot" type="text_to_voice" output="screen"/>
-  <node name="voice_to_text" pkg="robot" type="voice_to_text.py" output="screen"/>
-  <node name="text_to_text" pkg="robot" type="text_to_text.py" output="screen"/>
-  <node name="order_to_search" pkg="robot" type="order_to_search.py" output="screen"/>
-  <node name="remote_control" pkg="robot" type="remote_control.py" output="screen"/>
-  <!--node name="simple_navigation" pkg="robot" type="simple_navigation.py" output="screen"/-->
-  <node name="feedback_of_task" pkg="robot" type="feedback_of_task.py" output="screen"/>
-  <!--node name="face_recognition" pkg="robot" type="face_recognition.py" output="screen"/-->
+  <node name="VoiceCapture" pkg="robot" type="VoiceCapture.py" output="screen"/>
+  <node name="VoicePlay" pkg="robot" type="VoicePlay.py" output="screen"/>
+  <node name="TextToVoice" pkg="robot" type="TextToVoice" output="screen"/>
+  <node name="VoiceToText" pkg="robot" type="VoiceToText.py" output="screen"/>
+  <node name="TextToText" pkg="robot" type="TextToText.py" output="screen"/>
+  <node name="OrderSearch" pkg="robot" type="OrderSearch.py" output="screen"/>
+  <node name="RemoteControl" pkg="robot" type="RemoteControl.py" output="screen"/>
+  <node name="TaskFeedback" pkg="robot" type="TaskFeedback.py" output="screen"/>
 </launch>

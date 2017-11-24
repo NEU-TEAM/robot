@@ -137,7 +137,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/robot_node.cpp)
 
-add_executable(text_to_voice src/text_to_voice.cpp)
+add_executable(TextToVoice src/TextToVoice.cpp)
 # add_executable(wakeup_to_serve src/wakeup_to_serve.cpp)
 
 ## Rename C++ executable without prefix
@@ -150,7 +150,6 @@ add_executable(text_to_voice src/text_to_voice.cpp)
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-add_dependencies(text_to_voice text_to_voice_cpp)
 # add_dependencies(wakeup_to_serve wakeup_to_serve_cpp)
 
 ## Specify libraries to link a library or executable target against
@@ -158,7 +157,7 @@ add_dependencies(text_to_voice text_to_voice_cpp)
 #   ${catkin_LIBRARIES}
 # )
 
-target_link_libraries(text_to_voice ${catkin_LIBRARIES} /robot/lib/tts/libmsc.so)
+target_link_libraries(TextToVoice ${catkin_LIBRARIES} /robot/lib/tts/libmsc.so)
 # target_link_libraries(wakeup_to_serve ${catkin_LIBRARIES} -lmraa)
 
 #############
