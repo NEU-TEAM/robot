@@ -2,10 +2,9 @@
 # -*- coding: UTF-8 -*-
 
 import rospy
-import time
-from std_msgs.msg import String, Int32, Float32
-from geometry_msgs.msg import PoseStamped, Point, Quaternion
-from math import copysign
+from std_msgs.msg import String, Int8
+from geometry_msgs.msg import PoseStamped
+
 
 class OrderSearch:
     def __init__(self):
@@ -17,37 +16,37 @@ class OrderSearch:
         self.pub_text_to_voice = rospy.Publisher('/ctrl/voice/text_to_voice', String, queue_size=1)
         self.pub_text_to_text = rospy.Publisher('/ctrl/voice/text_to_text', String, queue_size=1)
 
-        self.pub_leftarm = rospy.Publisher('/call/leftarm', Int32, queue_size=2)
+        self.pub_left_arm = rospy.Publisher('/ctrl/voice/arm/left', Int8, queue_size=2)
         # self.pub_navigation = rospy.Publisher('simple_navigation', Int32, queue_size=1)
         self.pub_location = rospy.Publisher('/ctrl/voice/nav_location_goal', PoseStamped, queue_size=1)
 
-        self.location_list = ['厨房','卧室','客厅']
+        self.location_list = ['厨房', '卧室', '客厅']
 
-        self.order_dict = {	
-        					'bottle':	['给我拿瓶水','给我拿杯水','递我一瓶水','递我一杯水','拿瓶水','拿杯水'],
-        					'location': ['去厨房','去卧室','去客厅','来厨房','来卧室','来客厅'],
-        					'leftarm':	["递我", "放手",'给我','递我吧','放手吧','给我吧']
-        				  }
+        self.order_dict = {
+            'bottle': ['给我拿瓶水', '给我拿杯水', '递我一瓶水', '递我一杯水', '拿瓶水', '拿杯水'],
+            'location': ['去厨房', '去卧室', '去客厅', '来厨房', '来卧室', '来客厅'],
+            'left_arm': ["递我", "放手", '给我', '递我吧', '放手吧', '给我吧']
+        }
 
     def order_search(self, data, dictionary):
         for (key, sentences) in dictionary.iteritems():
             for sentence in sentences:
                 if data == sentence:
-                	if key == 'bottle':
-                		pass
+                    if key == 'bottle':
+                        pass
 
-                	if key == 'location':
-                		for location in self.location_list:
-                			if sentence.find(location) != -1:
-                				self.location = location
+                    if key == 'location':
+                        for location in self.location_list:
+                            if sentence.find(location) != -1:
+                                self.location = location
 
-                	if key == "leftarm":
-                		pass
+                    if key == "left_arm":
+                        pass
 
-                	return key
+                    return key
 
     def order_search_callback(self, msg):
-    	text_to_voice = ''
+        text_to_voice = ''
         order = self.order_search(msg.data[:-3], self.order_dict)
 
         if order == 'bottle':
@@ -61,30 +60,25 @@ class OrderSearch:
             self.pub_location.publish(pose_stamped)
 
         elif order == "location":
-			text_to_voice = "命令已收到，我这就去" + self.location + "！"
-			pose_stamped = PoseStamped()
-			pose_stamped.header.stamp = rospy.Time.now()
-			pose_stamped.header.frame_id = "map"
-			if self.location == '厨房':
-				pose_stamped.pose.position.x = 0.0
-				pose_stamped.pose.orientation.w = 1.0
-			elif self.location == '卧室':
-				pose_stamped.pose.position.x = 0.0
-				pose_stamped.pose.orientation.w = 1.0
-			else:
-				pose_stamped.pose.position.x = 0.0
-				pose_stamped.pose.orientation.w = 1.0
-			self.pub_location.publish(pose_stamped)
+            text_to_voice = "命令已收到，我这就去" + self.location + "！"
+            pose_stamped = PoseStamped()
+            pose_stamped.header.stamp = rospy.Time.now()
+            pose_stamped.header.frame_id = "map"
+            if self.location == '厨房':
+                pose_stamped.pose.position.x = 0.0
+                pose_stamped.pose.orientation.w = 1.0
+            elif self.location == '卧室':
+                pose_stamped.pose.position.x = 0.0
+                pose_stamped.pose.orientation.w = 1.0
+            else:
+                pose_stamped.pose.position.x = 0.0
+                pose_stamped.pose.orientation.w = 1.0
+            self.pub_location.publish(pose_stamped)
 
-        elif order == 'leftarm':
+        elif order == 'left_arm':
             text_to_voice = "您的杯子，请拿好！"
-            self.pub_leftarm.publish(2)
-            self.pub_leftarm.publish(1)
-
-
-        # elif order == "休息":
-        #     self.sayword="大宝要去休息了，有事您再叫我！"
-        #     rospy.set_param("is_ready_to_serve",False)
+            self.pub_left_arm.publish(2)
+            self.pub_left_arm.publish(1)
 
         else:
             pass

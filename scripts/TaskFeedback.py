@@ -2,18 +2,17 @@
 # -*- coding: UTF-8 -*-
 
 import rospy
-from std_msgs.msg import String
+from std_msgs.msg import Int8
 
 
 class TaskFeedback:
     def __init__(self):
         rospy.init_node('TaskFeedback', anonymous=True)
-        rospy.Subscriber('/ctrl/voice//task_status', String, self.task_feedback_callback)
+        rospy.Subscriber('/feed/base/task_status', Int8, self.task_feedback_callback)
 
-    @staticmethod
-    def task_feedback_callback(msg):
-    	task = rospy.get_param('/task')
-        if msg.data == "Goal_succeeded" and task == 'bottle':
+    def task_feedback_callback(self, msg):
+        task = rospy.get_param('/task')
+        if msg.data == 1 and task == 'bottle':
             rospy.set_param("/comm/param/control/target/is_set", True)
             rospy.set_param("/comm/param/control/target/label", "bottle")
             rospy.delete_param("/task")

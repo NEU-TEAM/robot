@@ -4,14 +4,13 @@
 import rospy
 from pyaudio import PyAudio, paInt16
 import numpy as np
-from datetime import datetime
 import wave
 
 is_ready_to_serve = False
 is_ready_to_recognize = False
 is_ready_to_capture = True
 
-capturedVoice = '/robot/wav/capturedVoice.wav'
+captured_voice = '/robot/wav/capturedVoice.wav'
 
 
 def voice_capture():
@@ -45,8 +44,7 @@ def voice_capture():
         else:
             if length > min_length:
                 voice_string = save_buffer
-                save_buffer = []
-                wf = wave.open(capturedVoice, 'wb')
+                wf = wave.open(captured_voice, 'wb')
                 wf.setnchannels(1)
                 wf.setsampwidth(2)
                 wf.setframerate(sampling_rate)
@@ -61,8 +59,8 @@ def voice_capture():
                 return True
             else:
                 save_count = 0
-                save_buffer = []
                 length = 0
+            save_buffer = []
 
 
 if __name__ == '__main__':

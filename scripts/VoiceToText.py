@@ -10,7 +10,7 @@ import uuid
 import base64
 import requests
 
-capturedVoice = "/robot/wav/capturedVoice.wav"
+captured_voice = "/robot/wav/capturedVoice.wav"
 
 
 # Use lower_case for function name and node name, CamelCase for class name
@@ -23,7 +23,7 @@ class VoiceToText:
         self.secretKey = "mcdf5t6QZWNHzGbwFkhjm5nT3KuKrMyf"
         self.auth_url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=" + self.apiKey + "&client_secret=" + self.secretKey;
         self.access_token = self.get_token()
-        self.cuid = uuid.UUID(int=uuid.getnode()).hex[-12:]
+        self.uuid = uuid.UUID(int=uuid.getnode()).hex[-12:]
         self.pub_order_search = rospy.Publisher('/ctrl/voice/order_search', String, queue_size=1)
 
         while not rospy.is_shutdown():
@@ -36,7 +36,7 @@ class VoiceToText:
                 print result_translation
 
                 if result_translation == '':
-                    os.remove(capturedVoice)
+                    os.remove(captured_voice)
                     rospy.set_param('is_ready_to_translate', False)
                     rospy.set_param('is_ready_to_capture', True)
                     continue
@@ -50,7 +50,7 @@ class VoiceToText:
                 rospy.set_param('is_ready_to_remind', True)
                 self.recognized_result = result_translation
                 self.pub_order_search.publish(self.recognized_result)
-                os.remove(capturedVoice)
+                os.remove(captured_voice)
                 rospy.set_param('is_ready_to_translate', False)
                 rospy.set_param('is_ready_to_capture', True)
 
@@ -60,9 +60,9 @@ class VoiceToText:
         return json.loads(json_data)['access_token']
 
     def voice_to_text(self):
-        wav_fp = open(capturedVoice, 'rb')
+        wav_fp = open(captured_voice, 'rb')
         voice_data = wav_fp.read()
-        data = {'format': 'wav', 'rate': 16000, 'channel': 1, 'cuid': self.cuid, 'token': self.access_token,'lan': 'zh', 'len': len(voice_data), 'speech': base64.b64encode(voice_data).decode('utf-8')}
+        data = {'format': 'wav', 'rate': 16000, 'channel': 1, 'cuid': self.uuid, 'token': self.access_token, 'lan': 'zh', 'len': len(voice_data), 'speech': base64.b64encode(voice_data).decode('utf-8')}
         result = requests.post(self.voice_to_text_url, data=json.dumps(data), headers={'Content-Type': 'application/json'}, stream=False)
         data_result = result.json()
         if data_result['err_no'] == 0:
