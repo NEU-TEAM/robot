@@ -12,8 +12,6 @@
 
 using namespace std;
 
-bool is_ready_to_play = false;
-
 const char* synthesized_voice = "/robot/wav/synthesizedVoice.wav";
 const char* params_of_synthesized_voice = "engine_type = local, text_encoding = UTF8, tts_res_path = fo|/robot/msc/res/tts/xiaoyan.jet;fo|/robot/msc/res/tts/common.jet, sample_rate = 16000, speed = 50, volume = 50, pitch = 50, rdn = 0";
 
@@ -90,7 +88,7 @@ int text_to_voice(const char* src_text, const char* des_path, const char* params
 	}
 	//printf("正在合成 ...\n");
 	fwrite(&wav_hdr, sizeof(wav_hdr) ,1, fp); //添加wav音频头，使用采样率为16000
-	while (1) 
+	while (true) 
 	{
 		/* 获取合成音频 */
 		const void* data = QTTSAudioGet(sessionID, &audio_len, &synth_status, &ret);
