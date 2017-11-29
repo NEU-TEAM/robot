@@ -76,7 +76,7 @@ class OrderSearch:
             self.pub_location.publish(pose_stamped)
 
         elif order == 'left_arm':
-            text_to_voice = "您的杯子，请拿好！"
+            text_to_voice = "您的水，请拿好！"
             self.pub_left_arm.publish(2)
             self.pub_left_arm.publish(1)
 
