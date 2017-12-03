@@ -10,7 +10,8 @@ class TaskFeedback:
         rospy.init_node('TaskFeedback', anonymous=True)
         rospy.Subscriber('/feed/base/task_status', Int8, self.task_feedback_callback)
 
-    def task_feedback_callback(self, msg):
+    @staticmethod
+    def task_feedback_callback(msg):
         task = rospy.get_param('/task')
         if msg.data == 1 and task == 'bottle':
             rospy.set_param("/comm/param/control/target/is_set", True)

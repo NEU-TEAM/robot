@@ -51,6 +51,7 @@ class OrderSearch:
 
         if order == 'bottle':
             text_to_voice = "好的，我这就去拿！"
+            # Change the task param format from /task to /param/voice/ctrl/task
             rospy.set_param("/task", 'bottle')
             pose_stamped = PoseStamped()
             pose_stamped.header.stamp = rospy.Time.now()
