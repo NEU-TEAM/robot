@@ -11,7 +11,6 @@ class SimpleNavigation:
     def __init__(self):
         rospy.init_node('SimpleNavigation', anonymous=True)
         self.navigation_client = actionlib.SimpleActionClient("move_base", MoveBaseAction)
-        self.running = False
         self.goal = MoveBaseGoal()
         self.goal.target_pose.header.frame_id = "map"
         self.goal.target_pose.header.stamp = rospy.Time.now()
@@ -34,16 +33,13 @@ class SimpleNavigation:
             self.goal.target_pose.pose.position.y = -0.625330209732
             self.goal.target_pose.pose.orientation.w = 1.0
 
-        if self.running:
-            self.navigation_client.cancel_goal()
         self.navigation_client.send_goal(self.goal)
-        self.running = True
         finished_before_timeout = self.navigation_client.wait_for_result(rospy.Duration(60.0))
         if finished_before_timeout:
             print("Action finished!")
         else:
-            print("Action did not finish before the time out.")
-        self.running = False
+        	self.navigation_client.cancel_goal()
+        	print("Action did not finish before the time out.")
 
 
 if __name__ == "__main__":

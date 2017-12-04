@@ -1,6 +1,5 @@
 ### topics:
 ```
-/ctrl/voice/android_remote_control
 /ctrl/voice/nav_location_goal
 /ctrl/voice/order_search
 /ctrl/voice/task_status
