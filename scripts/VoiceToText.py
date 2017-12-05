@@ -14,6 +14,7 @@ captured_voice = "/robot/wav/capturedVoice.wav"
 
 param_is_ready_to_capture = '/comm/param/ctrl/is_ready_to_capture'
 
+
 # Use lower_case for function name and node name, CamelCase for class name
 # This function translate the speech of user to text
 class VoiceToText:
