@@ -85,6 +85,7 @@ class OrderSearch:
             pass
 
         if text_to_voice != "":
+            print(text_to_voice)
             if rospy.has_param("is_remote_control"):
                 self.pub_android_remote_control.publish(text_to_voice + "!")
                 self.pub_text_to_voice.publish(text_to_voice)

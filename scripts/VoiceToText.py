@@ -54,7 +54,7 @@ class VoiceToText:
                 rospy.set_param('is_ready_to_remind', True)
                 self.recognized_result = result_translation
                 self.pub_order_search.publish(self.recognized_result)
-                os.remove(captured_voice)
+                # os.remove(captured_voice)
                 rospy.set_param('is_ready_to_translate', False)
                 rospy.set_param(param_is_ready_to_capture, True)
 
