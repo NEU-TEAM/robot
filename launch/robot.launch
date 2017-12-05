@@ -2,6 +2,9 @@
 
 <launch>
   <rosparam file="$(find robot)/param/param.yaml" command="load"/>
+  <!-- Process flow of this program -->
+  <!-- VoiceCapture -> VoiceToText -> OrderSearch -> TextToVoice (command)                    ->  VoicePlay -->
+  <!--                                            -> TextToText (conversation) -> TextToVoice ->            -->
   <node name="VoiceCapture" pkg="robot" type="VoiceCapture.py" output="screen"/>
   <node name="VoicePlay" pkg="robot" type="VoicePlay.py" output="screen"/>
   <node name="TextToVoice" pkg="robot" type="TextToVoice" output="screen"/>

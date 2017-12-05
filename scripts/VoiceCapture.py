@@ -8,6 +8,8 @@ import wave
 
 captured_voice = '/robot/wav/capturedVoice.wav'
 
+param_is_ready_to_capture = '/comm/param/ctrl/is_ready_to_capture'
+
 
 def voice_capture():
     num_samples = 2000  # pyaudio内置缓冲大小
@@ -18,7 +20,8 @@ def voice_capture():
     min_length = 7
 
     dev_to_capture = PyAudio()
-    stream = dev_to_capture.open(format=paInt16, channels=1, rate=sampling_rate, input=True, frames_per_buffer=num_samples)
+    stream = dev_to_capture.open(format=paInt16, channels=1, rate=sampling_rate,
+                                 input=True, frames_per_buffer=num_samples)
     save_count = 0
     save_buffer = []
     length = 0
@@ -50,7 +53,7 @@ def voice_capture():
                 stream.close()
                 dev_to_capture.terminate()
                 print("Recorded a piece of voice successfully!")
-                rospy.set_param('is_ready_to_capture', False)
+                rospy.set_param(param_is_ready_to_capture, False)
                 rospy.set_param('is_ready_to_translate', True)
                 return True
             else:
@@ -65,7 +68,7 @@ if __name__ == '__main__':
 
     while not rospy.is_shutdown():
         is_ready_to_serve = rospy.get_param('is_ready_to_serve')
-        is_ready_to_capture = rospy.get_param('is_ready_to_capture')
+        is_ready_to_capture = rospy.get_param(param_is_ready_to_capture)
         if is_ready_to_serve and is_ready_to_capture:
             print("Recording a piece of voice!")
             voice_capture()

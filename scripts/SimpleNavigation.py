@@ -34,12 +34,12 @@ class SimpleNavigation:
             self.goal.target_pose.pose.orientation.w = 1.0
 
         self.navigation_client.send_goal(self.goal)
-        finished_before_timeout = self.navigation_client.wait_for_result(rospy.Duration(60.0))
+        finished_before_timeout = self.navigation_client.wait_for_result(rospy.Duration(60))
         if finished_before_timeout:
             print("Action finished!")
         else:
-        	self.navigation_client.cancel_goal()
-        	print("Action did not finish before the time out.")
+            self.navigation_client.cancel_goal()
+            print("Action did not finish before the time out.")
 
 
 if __name__ == "__main__":

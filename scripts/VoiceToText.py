@@ -12,8 +12,10 @@ import requests
 
 captured_voice = "/robot/wav/capturedVoice.wav"
 
+param_is_ready_to_capture = '/comm/param/ctrl/is_ready_to_capture'
 
 # Use lower_case for function name and node name, CamelCase for class name
+# This function translate the speech of user to text
 class VoiceToText:
     def __init__(self):
         rospy.init_node('voice_to_text', anonymous=True)
@@ -21,7 +23,8 @@ class VoiceToText:
         self.voice_to_text_url = 'http://vop.baidu.com/server_api'
         self.apiKey = "1GQyi2TtlQc1xmkAkiaHzNtL"
         self.secretKey = "mcdf5t6QZWNHzGbwFkhjm5nT3KuKrMyf"
-        self.auth_url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=" + self.apiKey + "&client_secret=" + self.secretKey;
+        self.auth_url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=" \
+                        + self.apiKey + "&client_secret=" + self.secretKey
         self.access_token = self.get_token()
         self.uuid = uuid.UUID(int=uuid.getnode()).hex[-12:]
         self.pub_order_search = rospy.Publisher('/ctrl/voice/order_search', String, queue_size=1)
@@ -38,7 +41,7 @@ class VoiceToText:
                 if result_translation == '':
                     os.remove(captured_voice)
                     rospy.set_param('is_ready_to_translate', False)
-                    rospy.set_param('is_ready_to_capture', True)
+                    rospy.set_param(param_is_ready_to_capture, True)
                     continue
 
                 is_ready_to_play = False
@@ -52,7 +55,7 @@ class VoiceToText:
                 self.pub_order_search.publish(self.recognized_result)
                 os.remove(captured_voice)
                 rospy.set_param('is_ready_to_translate', False)
-                rospy.set_param('is_ready_to_capture', True)
+                rospy.set_param(param_is_ready_to_capture, True)
 
     def get_token(self):
         res = urllib2.urlopen(self.auth_url)
@@ -62,8 +65,11 @@ class VoiceToText:
     def voice_to_text(self):
         wav_fp = open(captured_voice, 'rb')
         voice_data = wav_fp.read()
-        data = {'format': 'wav', 'rate': 16000, 'channel': 1, 'cuid': self.uuid, 'token': self.access_token, 'lan': 'zh', 'len': len(voice_data), 'speech': base64.b64encode(voice_data).decode('utf-8')}
-        result = requests.post(self.voice_to_text_url, data=json.dumps(data), headers={'Content-Type': 'application/json'}, stream=False)
+        data = {'format': 'wav', 'rate': 16000, 'channel': 1, 'cuid': self.uuid, 'token': self.access_token,
+                'lan': 'zh', 'len': len(voice_data), 'speech': base64.b64encode(voice_data).decode('utf-8')}
+
+        result = requests.post(self.voice_to_text_url, data=json.dumps(data),
+                               headers={'Content-Type': 'application/json'}, stream=False)
         data_result = result.json()
         if data_result['err_no'] == 0:
             return data_result['result'][0]

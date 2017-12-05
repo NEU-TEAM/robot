@@ -9,7 +9,8 @@ import wave
 def voice_remind():
     wave_file = wave.open('/robot/wav/remindVoice.wav', 'rb')
     dev_to_play = pyaudio.PyAudio()
-    stream = dev_to_play.open(format=dev_to_play.get_format_from_width(wave_file.getsampwidth()), channels=wave_file.getnchannels(), rate=wave_file.getframerate(), output=True)
+    stream = dev_to_play.open(format=dev_to_play.get_format_from_width(wave_file.getsampwidth()),
+                              channels=wave_file.getnchannels(), rate=wave_file.getframerate(), output=True)
 
     while True:
         data = wave_file.readframes(500)  # 从音频流中读取1000个采样数据，data类型为str.注意对音频流的读写都是字符串
@@ -27,7 +28,8 @@ def voice_remind():
 def voice_play():
     wave_file = wave.open('/robot/wav/synthesizedVoice.wav', 'rb')
     dev_to_play = pyaudio.PyAudio()
-    stream = dev_to_play.open(format=dev_to_play.get_format_from_width(wave_file.getsampwidth()), channels=wave_file.getnchannels(), rate=wave_file.getframerate(), output=True)
+    stream = dev_to_play.open(format=dev_to_play.get_format_from_width(wave_file.getsampwidth()),
+                              channels=wave_file.getnchannels(), rate=wave_file.getframerate(), output=True)
     while True:
         is_ready_to_interrupt = rospy.get_param("is_ready_to_interrupt")
         if is_ready_to_interrupt:

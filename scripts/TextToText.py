@@ -8,13 +8,16 @@ import json
 
 
 class TextToText:
+    # This function upload conversation to turing and get feedback in text format,
+    # and transfer the answer into voice to broadcast on cellphone or on PC
     def __init__(self):
         rospy.init_node('TextToText', anonymous=True)
         self.response_text = ""
         self.key = 'a9c913f6e8f146a19ee8b40eca9cee03'
         self.user_id = '102043'
         self.loc = '辽宁省沈阳市'
-        self.request = 'http://www.tuling123.com/openapi/api?key=' + self.key + '&loc=' + self.loc + '&userid=' + self.user_id + '&info='
+        self.request = 'http://www.tuling123.com/openapi/api?key=' + self.key \
+                       + '&loc=' + self.loc + '&userid=' + self.user_id + '&info='
         self.pub_text_to_voice = rospy.Publisher("/ctrl/voice/text_to_voice", String, queue_size=1)
         self.pub_android_remote_control = rospy.Publisher("/ctrl/voice/android_remote_control", String, queue_size=1)
         rospy.Subscriber("/ctrl/voice/text_to_text", String, self.turing_callback)
