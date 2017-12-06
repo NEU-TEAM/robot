@@ -28,6 +28,7 @@ class VoiceToText:
                         + self.apiKey + "&client_secret=" + self.secretKey
         self.access_token = self.get_token()
         self.uuid = uuid.UUID(int=uuid.getnode()).hex[-12:]
+
         self.pub_order_search = rospy.Publisher('/ctrl/voice/order_search', String, queue_size=1)
 
         while not rospy.is_shutdown():
@@ -54,7 +55,7 @@ class VoiceToText:
                 rospy.set_param('is_ready_to_remind', True)
                 self.recognized_result = result_translation
                 self.pub_order_search.publish(self.recognized_result)
-                # os.remove(captured_voice)
+                os.remove(captured_voice)
                 rospy.set_param('is_ready_to_translate', False)
                 rospy.set_param(param_is_ready_to_capture, True)
 
