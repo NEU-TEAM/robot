@@ -1,6 +1,6 @@
 /comm/param/ctrl/is_ready_to_capture: true
 /comm/param/ctrl/is_ready_to_serve: true
-is_ready_to_interrupt: false
-is_ready_to_play: false
-is_ready_to_remind: false
-is_ready_to_translate: false
+/voice/param/is_ready_to_interrupt: false
+/voice/param/is_ready_to_play: false
+/voice/param/is_ready_to_remind: false
+/voice/param/is_ready_to_translate: false

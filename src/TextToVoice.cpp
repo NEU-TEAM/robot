@@ -15,6 +15,10 @@ using namespace std;
 const char* synthesized_voice = "/robot/wav/synthesizedVoice.wav";
 const char* params_of_synthesized_voice = "engine_type = local, text_encoding = UTF8, tts_res_path = fo|/robot/msc/res/tts/xiaoyan.jet;fo|/robot/msc/res/tts/common.jet, sample_rate = 16000, speed = 50, volume = 50, pitch = 50, rdn = 0";
 
+const char* param_is_ready_to_play = "/voice/param/is_ready_to_play";
+
+const char* topic_text_to_voice = "/voice/text_to_voice";
+
 typedef struct _wave_pcm_hdr
 {
   char		riff[4];
@@ -148,7 +152,7 @@ void xf_tts_callback(const std_msgs::String::ConstPtr& msg)
   {
     printf("text_to_voice failed, error code: %d.\n", ret);
   }
-  ros::param::set("is_ready_to_play",true);
+  ros::param::set(param_is_ready_to_play,true);
 exit:
   MSPLogout(); //退出登录
 }
@@ -157,7 +161,7 @@ int main(int argc,char **argv)
 {
   ros::init(argc,argv,"text_to_voice");
   ros::NodeHandle n;
-  ros::Subscriber pub = n.subscribe("/ctrl/voice/text_to_voice", 10, xf_tts_callback); 
+  ros::Subscriber pub = n.subscribe(topic_text_to_voice, 10, xf_tts_callback); 
   ros::spin();
   return 0;
 }

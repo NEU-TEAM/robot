@@ -10,6 +10,7 @@ captured_voice = '/robot/wav/capturedVoice.wav'
 
 param_is_ready_to_capture = '/comm/param/ctrl/is_ready_to_capture'
 param_is_ready_to_serve = '/comm/param/ctrl/is_ready_to_serve'
+param_is_ready_to_translate = '/voice/param/is_ready_to_translate'
 
 
 def voice_capture():
@@ -55,7 +56,7 @@ def voice_capture():
                 dev_to_capture.terminate()
                 print("Recorded a piece of voice successfully!")
                 rospy.set_param(param_is_ready_to_capture, False)
-                rospy.set_param(param_is_ready_to_serve, True)
+                rospy.set_param(param_is_ready_to_translate, True)
                 return True
             else:
                 save_count = 0

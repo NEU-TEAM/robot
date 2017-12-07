@@ -7,6 +7,9 @@ from std_msgs.msg import Int32
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
 
+topic_simple_navigation = '/voice/simple_navigation'
+
+
 class SimpleNavigation:
     def __init__(self):
         rospy.init_node('SimpleNavigation', anonymous=True)
@@ -14,7 +17,7 @@ class SimpleNavigation:
         self.goal = MoveBaseGoal()
         self.goal.target_pose.header.frame_id = "map"
         self.goal.target_pose.header.stamp = rospy.Time.now()
-        rospy.Subscriber('simple_navigation', Int32, self.simple_navigation_callback)
+        rospy.Subscriber(topic_simple_navigation, Int32, self.simple_navigation_callback)
 
     def simple_navigation_callback(self, msg):
         destination = msg.data

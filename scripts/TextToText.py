@@ -7,6 +7,13 @@ import urllib
 import json
 
 
+param_is_remote_control = '/voice/param/is_remote_control'
+
+topic_text_to_voice = '/voice/text_to_voice'
+topic_android_remote_control = '/voice/android_remote_control'
+topic_text_to_text = '/voice/text_to_text'
+
+
 class TextToText:
     # This function upload conversation to turing and get feedback in text format,
     # and transfer the answer into voice to broadcast on cellphone or on PC
@@ -18,9 +25,9 @@ class TextToText:
         self.loc = '辽宁省沈阳市'
         self.request = 'http://www.tuling123.com/openapi/api?key=' + self.key \
                        + '&loc=' + self.loc + '&userid=' + self.user_id + '&info='
-        self.pub_text_to_voice = rospy.Publisher("/ctrl/voice/text_to_voice", String, queue_size=1)
-        self.pub_android_remote_control = rospy.Publisher("/ctrl/voice/android_remote_control", String, queue_size=1)
-        rospy.Subscriber("/ctrl/voice/text_to_text", String, self.turing_callback)
+        self.pub_text_to_voice = rospy.Publisher(topic_text_to_voice, String, queue_size=1)
+        self.pub_android_remote_control = rospy.Publisher(topic_android_remote_control, String, queue_size=1)
+        rospy.Subscriber(topic_text_to_text, String, self.turing_callback)
 
     def turing_callback(self, msg):
         url = self.request + msg.data
@@ -29,10 +36,10 @@ class TextToText:
         text_json = json.loads(text_str)
         self.response_text = text_json["text"]
         print(self.response_text)
-        if rospy.has_param("is_remote_control"):
+        if rospy.has_param(param_is_remote_control):
             self.pub_android_remote_control.publish(self.response_text)
             self.pub_text_to_voice.publish(self.response_text)
-            rospy.delete_param("is_remote_control")
+            rospy.delete_param(param_is_remote_control)
         else:
             self.pub_text_to_voice.publish(self.response_text)
 

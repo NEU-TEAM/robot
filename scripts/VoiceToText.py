@@ -13,6 +13,12 @@ import requests
 captured_voice = "/robot/wav/capturedVoice.wav"
 
 param_is_ready_to_capture = '/comm/param/ctrl/is_ready_to_capture'
+param_is_ready_to_remind = '/voice/param/is_ready_to_remind'
+param_is_ready_to_play = '/voice/param/is_ready_to_play'
+param_is_ready_to_interrupt = '/voice/param/is_ready_to_interrupt'
+param_is_ready_to_translate = '/voice/param/is_ready_to_translate'
+
+topic_order_search = '/voice/order_search'
 
 
 # Use lower_case for function name and node name, CamelCase for class name
@@ -29,12 +35,12 @@ class VoiceToText:
         self.access_token = self.get_token()
         self.uuid = uuid.UUID(int=uuid.getnode()).hex[-12:]
 
-        self.pub_order_search = rospy.Publisher('/ctrl/voice/order_search', String, queue_size=1)
+        self.pub_order_search = rospy.Publisher(topic_order_search, String, queue_size=1)
 
         while not rospy.is_shutdown():
             is_ready_to_translate = False
-            if rospy.has_param("is_ready_to_translate"):
-                is_ready_to_translate = rospy.get_param("is_ready_to_translate")
+            if rospy.has_param(param_is_ready_to_translate):
+                is_ready_to_translate = rospy.get_param(param_is_ready_to_translate)
 
             if is_ready_to_translate:
                 result_translation = self.voice_to_text()
@@ -42,21 +48,21 @@ class VoiceToText:
 
                 if result_translation == '':
                     os.remove(captured_voice)
-                    rospy.set_param('is_ready_to_translate', False)
+                    rospy.set_param(param_is_ready_to_translate, False)
                     rospy.set_param(param_is_ready_to_capture, True)
                     continue
 
                 is_ready_to_play = False
-                if rospy.has_param('is_ready_to_play'):
-                    is_ready_to_play = rospy.get_param('is_ready_to_play')
+                if rospy.has_param(param_is_ready_to_play):
+                    is_ready_to_play = rospy.get_param(param_is_ready_to_play)
                 if is_ready_to_play:
-                    rospy.set_param('is_ready_to_interrupt', True)
+                    rospy.set_param(param_is_ready_to_interrupt, True)
 
-                rospy.set_param('is_ready_to_remind', True)
+                rospy.set_param(param_is_ready_to_remind, True)
                 self.recognized_result = result_translation
                 self.pub_order_search.publish(self.recognized_result)
                 os.remove(captured_voice)
-                rospy.set_param('is_ready_to_translate', False)
+                rospy.set_param(param_is_ready_to_translate, False)
                 rospy.set_param(param_is_ready_to_capture, True)
 
     def get_token(self):

@@ -6,19 +6,31 @@ from std_msgs.msg import String, Int8
 from geometry_msgs.msg import PoseStamped
 
 
+param_is_remote_control = '/voice/param/is_remote_control'
+param_task = '/voice/param/task'
+
+topic_order_search = '/voice/order_search'
+topic_android_remote_control = '/voice/android_remote_control'
+topic_text_to_voice = '/voice/text_to_voice'
+topic_text_to_text = '/voice/text_to_text'
+topic_arm_left = '/comm/voice/ctrl/arm/left'
+topic_nav_location_goal = '/comm/voice/ctrl/nav_location_goal'
+topic_simple_navigation = '/voice/simple_navigation'
+
+
 class OrderSearch:
     def __init__(self):
         self.location = ""
         self.left_arm = ""
         rospy.init_node('OrderSearch', anonymous=True)
-        rospy.Subscriber('/ctrl/voice/order_search', String, self.order_search_callback)
-        self.pub_android_remote_control = rospy.Publisher("android_remote_control", String, queue_size=1)
-        self.pub_text_to_voice = rospy.Publisher('/ctrl/voice/text_to_voice', String, queue_size=1)
-        self.pub_text_to_text = rospy.Publisher('/ctrl/voice/text_to_text', String, queue_size=1)
+        rospy.Subscriber(topic_order_search, String, self.order_search_callback)
+        self.pub_android_remote_control = rospy.Publisher(topic_android_remote_control, String, queue_size=1)
+        self.pub_text_to_voice = rospy.Publisher(topic_text_to_voice, String, queue_size=1)
+        self.pub_text_to_text = rospy.Publisher(topic_text_to_text, String, queue_size=1)
 
-        self.pub_left_arm = rospy.Publisher('/ctrl/voice/arm/left', Int8, queue_size=2)
-        # self.pub_navigation = rospy.Publisher('simple_navigation', Int32, queue_size=1)
-        self.pub_location = rospy.Publisher('/ctrl/voice/nav_location_goal', PoseStamped, queue_size=1)
+        self.pub_left_arm = rospy.Publisher(topic_arm_left, Int8, queue_size=2)
+        # self.pub_navigation = rospy.Publisher(topic_simple_navigation, Int32, queue_size=1)
+        self.pub_location = rospy.Publisher(topic_nav_location_goal, PoseStamped, queue_size=1)
 
         self.location_list = ['厨房', '卧室', '客厅']
 
@@ -56,7 +68,7 @@ class OrderSearch:
         if order == 'fetch':
             text_to_voice = "好的，我这就去拿！"
             # Change the task param format from /task to /voice/param/ctrl/task
-            rospy.set_param("/task", 'bottle')
+            rospy.set_param(param_task, 'bottle')
             pose_stamped = PoseStamped()
             pose_stamped.header.stamp = rospy.Time.now()
             pose_stamped.header.frame_id = "map"
@@ -93,10 +105,10 @@ class OrderSearch:
 
         if text_to_voice != "":
             print(text_to_voice)
-            if rospy.has_param("is_remote_control"):
+            if rospy.has_param(param_is_remote_control):
                 self.pub_android_remote_control.publish(text_to_voice + "!")
                 self.pub_text_to_voice.publish(text_to_voice)
-                rospy.delete_param("is_remote_control")
+                rospy.delete_param(param_is_remote_control)
             else:
                 self.pub_text_to_voice.publish(text_to_voice + "!")
         else:
