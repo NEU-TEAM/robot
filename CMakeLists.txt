@@ -119,6 +119,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 # include_directories(include)
 include_directories(
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -157,7 +158,7 @@ add_executable(TextToVoice src/TextToVoice.cpp)
 #   ${catkin_LIBRARIES}
 # )
 
-target_link_libraries(TextToVoice ${catkin_LIBRARIES} /robot/lib/tts/libmsc.so)
+target_link_libraries(TextToVoice ${catkin_LIBRARIES} -lmsc)
 # target_link_libraries(wakeup_to_serve ${catkin_LIBRARIES} -lmraa)
 
 #############

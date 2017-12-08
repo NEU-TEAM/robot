@@ -4,7 +4,6 @@
 import rospy
 from std_msgs.msg import String
 
-
 param_is_ready_to_play = '/voice/param/is_ready_to_play'
 param_is_ready_to_interrupt = '/voice/param/is_ready_to_interrupt'
 param_is_remote_control = '/voice/param/is_remote_control'

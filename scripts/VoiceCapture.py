@@ -5,8 +5,11 @@ import rospy
 from pyaudio import PyAudio, paInt16
 import numpy as np
 import wave
+import os
 
-captured_voice = '/robot/wav/capturedVoice.wav'
+path_prefix = os.path.abspath('..')
+
+captured_voice = path_prefix + '/catkin_ws/src/robot/robot/wav/capturedVoice.wav'
 
 param_is_ready_to_capture = '/comm/param/ctrl/is_ready_to_capture'
 param_is_ready_to_serve = '/comm/param/ctrl/is_ready_to_serve'

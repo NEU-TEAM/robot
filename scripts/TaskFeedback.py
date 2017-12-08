@@ -4,7 +4,6 @@
 import rospy
 from std_msgs.msg import Int8
 
-
 param_task = '/voice/param/task'
 
 topic_base_task_status = '/comm/voice/ctrl/task_status'

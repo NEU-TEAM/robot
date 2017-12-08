@@ -6,7 +6,6 @@ from std_msgs.msg import String
 import urllib
 import json
 
-
 param_is_remote_control = '/voice/param/is_remote_control'
 
 topic_text_to_voice = '/voice/text_to_voice'

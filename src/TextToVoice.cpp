@@ -1,9 +1,9 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 
-#include "/robot/inc/qtts.h"
-#include "/robot/inc/msp_cmn.h"
-#include "/robot/inc/msp_errors.h"
+#include "qtts.h"
+#include "msp_cmn.h"
+#include "msp_errors.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -12,8 +12,8 @@
 
 using namespace std;
 
-const char* synthesized_voice = "/robot/wav/synthesizedVoice.wav";
-const char* params_of_synthesized_voice = "engine_type = local, text_encoding = UTF8, tts_res_path = fo|/robot/msc/res/tts/xiaoyan.jet;fo|/robot/msc/res/tts/common.jet, sample_rate = 16000, speed = 50, volume = 50, pitch = 50, rdn = 0";
+const char* synthesized_voice;
+const char* params_of_synthesized_voice;
 
 const char* param_is_ready_to_play = "/voice/param/is_ready_to_play";
 
@@ -160,6 +160,19 @@ exit:
 int main(int argc,char **argv)
 {
   ros::init(argc,argv,"text_to_voice");
+  char _synthesized_voice[100];
+  realpath("../catkin_ws/src/robot", _synthesized_voice);
+  strcat(_synthesized_voice, "/robot/wav/synthesizedVoice.wav");
+  synthesized_voice = _synthesized_voice;
+  char _params_of_synthesized_voice[150] = "engine_type = local, text_encoding = UTF8, tts_res_path = fo|";
+  char path_prefix[50];
+  realpath("../catkin_ws/src/robot", path_prefix);
+  strcat(_params_of_synthesized_voice, path_prefix);
+  strcat(_params_of_synthesized_voice, "/robot/msc/res/tts/xiaoyan.jet;fo|");
+  strcat(_params_of_synthesized_voice, path_prefix);
+  strcat(_params_of_synthesized_voice, "/robot/msc/res/tts/common.jet, sample_rate = 16000, speed = 50, volume = 50, pitch = 50, rdn = 0");
+  params_of_synthesized_voice = _params_of_synthesized_voice;
+
   ros::NodeHandle n;
   ros::Subscriber pub = n.subscribe(topic_text_to_voice, 10, xf_tts_callback); 
   ros::spin();

@@ -3,14 +3,16 @@
 
 import rospy
 from std_msgs.msg import String
-import os
 import urllib2
 import json
 import uuid
 import base64
 import requests
+import os
 
-captured_voice = "/robot/wav/capturedVoice.wav"
+path_prefix = os.path.abspath('..')
+
+captured_voice = path_prefix + "/catkin_ws/src/robot/robot/wav/capturedVoice.wav"
 
 param_is_ready_to_capture = '/comm/param/ctrl/is_ready_to_capture'
 param_is_ready_to_remind = '/voice/param/is_ready_to_remind'

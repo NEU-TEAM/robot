@@ -6,7 +6,6 @@ import actionlib
 from std_msgs.msg import Int32
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
-
 topic_simple_navigation = '/voice/simple_navigation'
 
 

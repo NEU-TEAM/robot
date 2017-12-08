@@ -4,7 +4,12 @@
 import rospy
 import pyaudio
 import wave
+import os
 
+path_prefix = os.path.abspath('..')
+
+remindVoice = path_prefix + '/catkin_ws/src/robot/robot/wav/remindVoice.wav'
+synthesizedVoice = path_prefix + '/catkin_ws/src/robot/robot/wav/synthesizedVoice.wav'
 
 param_is_ready_to_remind = '/voice/param/is_ready_to_remind'
 param_is_ready_to_play = '/voice/param/is_ready_to_play'
@@ -12,7 +17,7 @@ param_is_ready_to_interrupt = '/voice/param/is_ready_to_interrupt'
 
 
 def voice_remind():
-    wave_file = wave.open('/robot/wav/remindVoice.wav', 'rb')
+    wave_file = wave.open(remindVoice, 'rb')
     dev_to_play = pyaudio.PyAudio()
     stream = dev_to_play.open(format=dev_to_play.get_format_from_width(wave_file.getsampwidth()),
                               channels=wave_file.getnchannels(), rate=wave_file.getframerate(), output=True)
@@ -31,7 +36,7 @@ def voice_remind():
 
 
 def voice_play():
-    wave_file = wave.open('/robot/wav/synthesizedVoice.wav', 'rb')
+    wave_file = wave.open(synthesizedVoice, 'rb')
     dev_to_play = pyaudio.PyAudio()
     stream = dev_to_play.open(format=dev_to_play.get_format_from_width(wave_file.getsampwidth()),
                               channels=wave_file.getnchannels(), rate=wave_file.getframerate(), output=True)

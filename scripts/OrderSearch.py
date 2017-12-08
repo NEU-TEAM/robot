@@ -5,7 +5,6 @@ import rospy
 from std_msgs.msg import String, Int8
 from geometry_msgs.msg import PoseStamped
 
-
 param_is_remote_control = '/voice/param/is_remote_control'
 param_task = '/voice/param/task'
 

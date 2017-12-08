@@ -7,9 +7,9 @@ Ubuntu 14.04 + ROS(indigo)
 
 #### Steps:
 
-step 1：copy the inside robot to ～/catkin_ws/src/ directory
+step 1：copy the /robot/lib/libmsc.so to /usr/lib directory
 
-step 2：copy the outside robot to / directory
+step 2：copy the robot to ～/catkin_ws/src/ directory
 
 step 3：roslaunch robot robot.launch
 
