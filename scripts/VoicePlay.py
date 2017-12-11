@@ -63,17 +63,22 @@ def voice_play():
 if __name__ == '__main__':
     rospy.init_node('VoicePlay', anonymous=True)
 
+    serve_status = True
     while not rospy.is_shutdown():
         is_ready_to_remind = rospy.get_param(param_is_ready_to_remind)
         is_ready_to_play = rospy.get_param(param_is_ready_to_play)
-        is_ready_to_serve = rospy.get_param(param_is_ready_to_serve)
-        if is_ready_to_serve:
-            voice_remind(onVoice)
-        else:
-            voice_remind(offVoice)
+
         if is_ready_to_remind:
             voice_remind(remindVoice)
         if is_ready_to_play:
             voice_play()
+
+        is_ready_to_serve = rospy.get_param(param_is_ready_to_serve)
+        if is_ready_to_serve != serve_status:
+            if is_ready_to_serve:
+                voice_remind(onVoice)
+            else:
+                voice_remind(offVoice)
+            serve_status = is_ready_to_serve
             
-    print("VoicePlay is over!")
+    print("VoicePlay terminated.")
