@@ -16,6 +16,16 @@ param_is_ready_to_serve = '/comm/param/ctrl/is_ready_to_serve'
 param_is_ready_to_translate = '/voice/param/is_ready_to_translate'
 
 
+def play_sound(num):
+    if num == 0:
+        # Sound for shutdown
+        pass
+    elif num == 1:
+        # Sound for wake up
+        pass
+    pass
+
+
 def voice_capture():
     num_samples = 2000  # pyaudio内置缓冲大小
     sampling_rate = 16000  # 取样频率
