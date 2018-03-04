@@ -16,22 +16,14 @@ param_is_ready_to_serve = '/comm/param/ctrl/is_ready_to_serve'
 param_is_ready_to_translate = '/voice/param/is_ready_to_translate'
 
 
-def play_sound(num):
-    if num == 0:
-        # Sound for shutdown
-        pass
-    elif num == 1:
-        # Sound for wake up
-        pass
-    pass
-
-
 def voice_capture():
+    flag = False
     num_samples = 2000  # pyaudio内置缓冲大小
     sampling_rate = 16000  # 取样频率
     level = 2000  # 声音保存的阈值
-    count_num = 15  # NUM_SAMPLES个取样之内出现COUNT_NUM个大于LEVEL的取样则记录声音
-    save_length = 4  # 声音记录的最小长度：save_length * num_samples 个取样
+    count_num_amp1 = 10
+    count_num_amp2 = 15
+    silence_length = 4
     min_length = 7
 
     dev_to_capture = PyAudio()
@@ -40,41 +32,58 @@ def voice_capture():
     save_count = 0
     save_buffer = []
     length = 0
+    silence = 0
 
     while True:
         string_audio_data = stream.read(num_samples)
         audio_data = np.fromstring(string_audio_data, dtype=np.short)
         large_sample_count = np.sum(audio_data > level)
 
-        if large_sample_count > count_num:
-            save_count = save_length
-        else:
-            save_count -= 1
-
-        if save_count > 0:
-            save_buffer.append(string_audio_data)
-            length += 1
-
-        else:
-            if length > min_length:
-                voice_string = save_buffer
-                wf = wave.open(captured_voice, 'wb')
-                wf.setnchannels(1)
-                wf.setsampwidth(2)
-                wf.setframerate(sampling_rate)
-                wf.writeframes(np.array(voice_string).tostring())
-                wf.close()
-                stream.stop_stream()
-                stream.close()
-                dev_to_capture.terminate()
-                print("Recorded a piece of voice successfully!")
-                rospy.set_param(param_is_ready_to_capture, False)
-                rospy.set_param(param_is_ready_to_translate, True)
-                return True
-            else:
-                save_count = 0
+        if not flag:
+            if large_sample_count < count_num_amp1:
+                save_buffer = []
                 length = 0
-            save_buffer = []
+            elif count_num_amp1 < large_sample_count < count_num_amp2:
+                save_buffer.append(string_audio_data)
+                length += 1
+            else:
+                save_buffer.append(string_audio_data)
+                length += 1
+                flag = True
+                silence = 0
+        else:
+            if large_sample_count > count_num_amp1:
+                save_buffer.append(string_audio_data)
+                length += 1
+            else:
+                silence += 1
+                if silence < silence_length:
+                    save_buffer.append(string_audio_data)
+                    length += 1
+                elif length < min_length:
+                    flag = False
+                    length = 0
+                    save_buffer = []
+                    silence = 0
+                else:
+                    voice_string = save_buffer
+                    wf = wave.open(captured_voice, 'wb')
+                    wf.setnchannels(1)
+                    wf.setsampwidth(2)
+                    wf.setframerate(sampling_rate)
+                    wf.writeframes(np.array(voice_string).tostring())
+                    wf.close()
+                    stream.stop_stream()
+                    stream.close()
+                    dev_to_capture.terminate()
+                    print("Recorded a piece of voice successfully!")
+                    rospy.set_param(param_is_ready_to_capture, False)
+                    rospy.set_param(param_is_ready_to_translate, True)
+                    flag = False
+                    length = 0
+                    save_buffer = []
+                    silence = 0
+                    return True
 
 
 if __name__ == '__main__':

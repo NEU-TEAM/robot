@@ -7,7 +7,6 @@ from geometry_msgs.msg import PoseStamped
 
 param_is_remote_control = '/voice/param/is_remote_control'
 param_task = '/voice/param/task'
-param_is_put = '/comm/param/ctrl/is_put'
 
 topic_order_search = '/voice/order_search'
 topic_android_remote_control = '/voice/android_remote_control'
@@ -98,9 +97,6 @@ class OrderSearch:
             self.pub_left_arm.publish(1)
 
         elif order == 'place':
-            # Set the param twice to make sure no weired thing happen
-            rospy.set_param(param_is_put, 0)
-            rospy.set_param(param_is_put, 1)
             pass
 
         else:

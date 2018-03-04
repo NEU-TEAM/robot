@@ -48,7 +48,8 @@ class VoiceToText:
                 result_translation = self.voice_to_text()
                 print result_translation
 
-                if result_translation == '':
+                # if result_translation == '' or result_translation == '，'.decode('utf8'):
+                if len(result_translation) < 4:
                     os.remove(captured_voice)
                     rospy.set_param(param_is_ready_to_translate, False)
                     rospy.set_param(param_is_ready_to_capture, True)
